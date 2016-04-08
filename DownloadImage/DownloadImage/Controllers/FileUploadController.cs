@@ -10,6 +10,7 @@ using DownloadImage.Hubs;
 using DownloadImage.Models;
 using DownloadImage.Services;
 using Microsoft.AspNet.SignalR;
+using Newtonsoft.Json.Linq;
 
 namespace DownloadImage.Controllers
 {
@@ -53,14 +54,16 @@ namespace DownloadImage.Controllers
 
                 return Json(new EmptyResult());
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 var message = new ImageModel
                 {
                     StatusCode = HttpContext.Current.Response.StatusCode.ToString()
                 };
+                string errResponse = "{'error': 'InternalServerError.'}";
+                JObject json = JObject.Parse(errResponse);
                 SendMessage(message);
-                return InternalServerError(e);
+                return Json(json);
             }
         }
     }
